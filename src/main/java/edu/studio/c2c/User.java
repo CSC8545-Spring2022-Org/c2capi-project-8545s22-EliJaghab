@@ -3,16 +3,17 @@ package edu.studio.c2c;
 import java.util.Objects;
 
 public class User {
+
+    protected enum UserType {
+        Student, Faculty, Company
+    }
+
     private String name;
     private String email;
     private String userType;
     private StudentProfile studentProfile;
 
-    public User(String name, String email, String userType, StudentProfile studentProfile) {
-        this.name = name;
-        this.email = email;
-        this.userType = userType;
-        this.studentProfile = studentProfile;
+    public User() {
     }
 
     public boolean equals(User user) {
@@ -24,8 +25,16 @@ public class User {
         }
     }
 
-    public int hashCode() {
-        return Objects.hash(name, userType);
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        User other = (User) obj;
+        return Objects.equals(name, other.name) && userType == other.userType;
     }
 
     public String toString() {

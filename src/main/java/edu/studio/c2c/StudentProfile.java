@@ -2,19 +2,22 @@
 package edu.studio.c2c;
 
 public class StudentProfile {
-    private String classification;
-    private String[] skills;
 
-    public StudentProfile(String classification, String[] skills) {
-        this.classification = classification;
-        this.skills = skills;
+    protected enum Classification {
+        Graduate, Undergraduate
     }
 
-    public String getClassification() {
+    private String[] skills;
+    private Classification classification;
+
+    public StudentProfile() {
+    }
+
+    public Classification getClassification() {
         return classification;
     }
 
-    public void setClassification(String classification) {
+    public void setClassification(Classification classification) {
         this.classification = classification;
     }
 

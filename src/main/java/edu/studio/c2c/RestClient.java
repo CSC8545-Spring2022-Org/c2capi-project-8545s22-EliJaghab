@@ -14,7 +14,7 @@ public class RestClient {
             return " Hello" + getHTTPResponse.getBody();
         }
         else {
-            return "Invalid";
+            return "Invalid Response: Error " + getHTTPResponse.getStatus();
         }
     }
 
