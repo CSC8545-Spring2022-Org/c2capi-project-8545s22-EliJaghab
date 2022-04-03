@@ -10,35 +10,40 @@ public class User {
 
     private String name;
     private String email;
-    private String userType;
+    private UserType userType;
     private StudentProfile studentProfile;
 
     public User() {
     }
 
-    public boolean equals(User user) {
-        if (this.name.equals(user.name) && this.userType.equals(userType)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, userType);
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        User other = (User) obj;
-        return Objects.equals(name, other.name) && userType == other.userType;
+        boolean isEqual = false;
+        if (this == obj) {
+            isEqual = true;
+        }
+        else if (obj == null) {
+            isEqual = false;
+        }
+        else if (getClass() != obj.getClass()) {
+            isEqual = false;
+        }
+        else {
+            User other = (User) obj;
+            isEqual = Objects.equals(name, other.name) && userType == other.userType;
+        }
+        return isEqual;
     }
 
     public String toString() {
-        return name + " " + email + " " + userType + " " + studentProfile;
+        return "Name: " + this.getName() + " " + "Email: " + this.getEmail() + " " + "User Type: " + this.getUserType()
+                + " " + "Classification: " + this.studentProfile.getClassification() + " " + "Skills: "
+                + this.studentProfile.getSkills();
     }
 
     public String getName() {
@@ -57,12 +62,12 @@ public class User {
         this.email = email;
     }
 
-    public String getUserType() {
+    public UserType getUserType() {
         return userType;
     }
 
-    public void setUserType(String userType) {
-        this.userType = userType;
+    public void setUserType(UserType student) {
+        this.userType = student;
     }
 
     public StudentProfile getStudentProfile() {

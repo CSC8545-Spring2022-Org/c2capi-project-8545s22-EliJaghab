@@ -9,7 +9,6 @@ public class RestClient {
     public static String getUsers(String token) {
         HttpResponse<String> getHTTPResponse = Unirest.get(API_URI).header("Authorization", "Bearer " + token)
                 .asString();
-        System.out.println(getHTTPResponse.getStatus());
         if (isResponseSuccessful(getHTTPResponse)) {
             return " Hello" + getHTTPResponse.getBody();
         }
