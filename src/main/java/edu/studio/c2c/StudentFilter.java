@@ -99,8 +99,22 @@ public class StudentFilter {
 
     public void printCriteria(String level, String[] skills) {
         String skillsOutput = skills.toString();
+        skillsOutput = formatString(skills);
         System.out.println("Selected search criteria: StudentFilter [levelCriterion=" + level + ", skillsCriteria="
                 + skillsOutput + "]");
+    }
+
+    public String formatString(String[] rawSkills) {
+        StringBuilder skillsBuilder = new StringBuilder();
+        skillsBuilder.append("[");
+        for (String skill : rawSkills) {
+            skillsBuilder.append(skill + ", ");
+        }
+        skillsBuilder.delete(skillsBuilder.length() - 2, skillsBuilder.length());
+        skillsBuilder.append("]");
+        String skillsOutput = skillsBuilder.toString();
+        return skillsOutput;
+
     }
 
 }
