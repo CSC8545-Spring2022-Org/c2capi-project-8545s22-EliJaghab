@@ -10,7 +10,7 @@ public class RestClient {
         HttpResponse<String> getHTTPResponse = Unirest.get(API_URI).header("Authorization", "Bearer " + token)
                 .asString();
         if (isResponseSuccessful(getHTTPResponse)) {
-            return " Hello" + getHTTPResponse.getBody();
+            return getHTTPResponse.getBody();
         }
         else {
             return "Invalid Response: Error " + getHTTPResponse.getStatus();

@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 public class RestClientTest {
+    private RestClient client = new RestClient();
 
     @Test
     public void testValidGetUsers() {
-        RestClient client = new RestClient();
         String token = obtainBearerTokenUsingSystemProps();
         String actualResponse = client.getUsers(token);
         assertNotNull(actualResponse);
@@ -17,7 +17,6 @@ public class RestClientTest {
 
     @Test
     public void testInvalidGetUsers() {
-        RestClient client = new RestClient();
         String token = "invalid_token";
         String actualResponse = client.getUsers(token);
         String expectedResponse = "Invalid Response: Error";
@@ -28,4 +27,5 @@ public class RestClientTest {
         String token = System.getProperty("bearer.token");
         return token;
     }
+
 }

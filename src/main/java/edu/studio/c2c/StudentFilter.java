@@ -1,5 +1,6 @@
 package edu.studio.c2c;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class StudentFilter {
@@ -14,12 +15,13 @@ public class StudentFilter {
     protected static final String UNDERGRAD_LEVEL = "U";
     protected static final String BOTH_LEVEL = "B";
 
-    public void startConsole() {
+    public void startConsole(List<User> formattedStudents) {
         String searchAgain = YES_SEARCH_AGAIN;
         while (YES_SEARCH_AGAIN.equals(searchAgain)) {
             String level = getLevel();
             String[] skills = getSkills();
             System.out.println(getCriteriaOutput(level, skills));
+            System.out.println(getMatch(formattedStudents, level, skills));
             searchAgain = getSearchAgain();
         }
     }
@@ -30,7 +32,7 @@ public class StudentFilter {
         while (!isLevelValid(level)) {
             scanner = new Scanner(System.in);
             System.out.println(LEVEL_PROMPT);
-            level = scanner.nextLine();
+            level = scanner.nextLine().toUpperCase();
         }
         return level;
     }
@@ -58,7 +60,7 @@ public class StudentFilter {
     }
 
     public boolean areSkillsValid(String skills) {
-        if (!skills.equals("") && !skills.equals(" ")) {
+        if (!"".equals(skills) && !" ".equals(skills)) {
             return true;
         }
         else {
@@ -72,7 +74,6 @@ public class StudentFilter {
         for (int i = 0; i < rawSkillsSplit.length; i++) {
             skills[i] = rawSkillsSplit[i].trim();
         }
-        System.out.println(skills.length);
         return skills;
     }
 
@@ -98,14 +99,14 @@ public class StudentFilter {
     }
 
     public String getCriteriaOutput(String level, String[] skills) {
-        String skillsOutput = skills.toString();
-        skillsOutput = formatString(skills);
-        String criteriaOutput = "Selected search criteria: StudentFilter [levelCriterion=" + level + ", skillsCriteria="
-                + skillsOutput + "]";
+        String skillsOutput = formatSkills(skills);
+        String levelOutput = formatLevel(level);
+        String criteriaOutput = "Selected search criteria: StudentFilter [levelCriterion=" + levelOutput
+                + ", skillsCriteria=" + skillsOutput + "]";
         return criteriaOutput;
     }
 
-    public String formatString(String[] rawSkills) {
+    public String formatSkills(String[] rawSkills) {
         StringBuilder skillsBuilder = new StringBuilder();
         skillsBuilder.append("[");
         for (String skill : rawSkills) {
@@ -115,6 +116,44 @@ public class StudentFilter {
         skillsBuilder.append("]");
         String skillsOutput = skillsBuilder.toString();
         return skillsOutput;
+
+    }
+
+    public String formatLevel(String rawLevel) {
+        String level = "";
+        if (rawLevel == "G") {
+            level = "Graduate";
+        }
+        else if (rawLevel == "U") {
+            level = "Undergraduate";
+        }
+        else {
+            level = "Both";
+        }
+        return level;
+    }
+
+    public String getMatch(List<User> formattedStudents, String level, String[] skills) {
+        if (level != "B") {
+            StudentProfile.Classification classification = getClassification(level);
+            for (User user : formattedStudents) {
+                if (user.getStudentProfile().getClassification() == classification) {
+
+                }
+
+            }
+
+        }
+        return level;
+    }
+
+    public StudentProfile.Classification getClassification(String level) {
+        if (level == "G") {
+            return StudentProfile.Classification.Graduate;
+        }
+        else if (level == "B") {
+            return StudentProfile.Classification.Undergraduate;
+        }
 
     }
 

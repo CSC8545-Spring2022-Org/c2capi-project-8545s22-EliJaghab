@@ -1,17 +1,17 @@
 package edu.studio.c2c;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 public class StudentFilterTest {
+    private StudentFilter filter = new StudentFilter();
 
     @Test
     public void testIsLevelValid() {
-        StudentFilter filter = new StudentFilter();
-
         String graduate = "G";
         assertTrue(filter.isLevelValid(graduate));
 
@@ -42,8 +42,6 @@ public class StudentFilterTest {
 
     @Test
     public void areSkillsValid() {
-        StudentFilter filter = new StudentFilter();
-
         String oneSkill = "python";
         assertTrue(filter.areSkillsValid(oneSkill));
 
@@ -53,7 +51,7 @@ public class StudentFilterTest {
         String threeSkills = "python, java, tdd";
         assertTrue(filter.areSkillsValid(threeSkills));
 
-        String wrongNull = " ";
+        String wrongNull = "";
         assertFalse(filter.areSkillsValid(wrongNull));
 
         String wrongSpace = " ";
@@ -63,8 +61,6 @@ public class StudentFilterTest {
 
     @Test
     public void testTrimSkills() {
-        StudentFilter filter = new StudentFilter();
-
         String oneSkill = "python";
         String[] oneSkillExpected = { "python" };
         assertArrayEquals(filter.trimSkills(oneSkill), oneSkillExpected);
@@ -117,9 +113,24 @@ public class StudentFilterTest {
 
     @Test
     public void testGetCriteriaOutput() {
-        StudentFilter filter = new StudentFilter();
-        
-    
-    
+        String[] skills = { "python", "java", "TDD" };
+        String level = "G";
+        String expectedOutput = "Selected search criteria: StudentFilter [levelCriterion=Graduate, skillsCriteria=[python, java, TDD]]";
+        assertEquals(filter.getCriteriaOutput(level, skills), expectedOutput);
+    }
+
+    @Test
+    public void testFormatSkills() {
+        String[] rawSkills = { "python", "java", "TDD" };
+        String expectedSkills = "[python, java, TDD]";
+        assertEquals(filter.formatSkills(rawSkills), expectedSkills);
+    }
+
+    @Test
+    public void testFormatLevel() {
+        assertEquals(filter.formatLevel("G"), "Graduate");
+        assertEquals(filter.formatLevel("U"), "Undergraduate");
+        assertEquals(filter.formatLevel("B"), "Both");
+    }
 
 }

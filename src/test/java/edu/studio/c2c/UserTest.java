@@ -12,10 +12,6 @@ import edu.studio.c2c.User.UserType;
 
 public class UserTest {
 
-    public void generateUsers() {
-
-    }
-
     @Test
     public void testHashCode() {
         User user1Student = new User();
