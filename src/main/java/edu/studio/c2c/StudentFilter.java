@@ -1,7 +1,10 @@
 package edu.studio.c2c;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import edu.studio.c2c.StudentProfile.Classification;
 
 public class StudentFilter {
 
@@ -133,28 +136,70 @@ public class StudentFilter {
         return level;
     }
 
-    public String getMatch(List<User> formattedStudents, String level, String[] skills) {
-        if (level != "B") {
-            StudentProfile.Classification classification = getClassification(level);
-            for (User user : formattedStudents) {
-                if (user.getStudentProfile().getClassification() == classification) {
+    public String getMatch(List<User> formattedStudents, String level, String[] searchSkills) {
+        StringBuilder matchesBuilder = new StringBuilder();
+        List<Classification> filters = getLevelFilters(level);
+        Integer matchedCount = 0;
+        List<User> matchedStudents = new ArrayList<User>();
+        for (User user : formattedStudents) {
+            if (doesLevelMatch(filters, user)) {
+                for (String searchSkill : searchSkills) {
+                    if (doesSkillsMatch(searchSkill, user)) {
+                        matchedCount++;
+                        matchedStudents.add(user);
+                        break;
 
+                    }
                 }
-
             }
 
         }
-        return level;
+
+    }return"hello";
+
     }
 
-    public StudentProfile.Classification getClassification(String level) {
+    public boolean doesSkillsMatch(String rawSearchSkill, User user) {
+        String skills = user.getStudentProfile().getSkills();
+        String searchSkill = rawSearchSkill.toLowerCase();
+        if (skills.contains(searchSkill)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    public boolean doesLevelMatch(List<Classification> filters, User user) {
+        StudentProfile.Classification firstFilter = filters.get(0);
+        StudentProfile.Classification secondFilter = filters.get(1);
+        StudentProfile.Classification classification = user.getStudentProfile().getClassification();
+        if (classification == firstFilter || classification == secondFilter) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    public String getSkills (User user) {
+        return user.getStudentProfile().getSkills()
+
+    public List<Classification> getLevelFilters(String level) {
+        List<StudentProfile.Classification> filters = new ArrayList<StudentProfile.Classification>();
         if (level == "G") {
-            return StudentProfile.Classification.Graduate;
+            filters.add(StudentProfile.Classification.Graduate);
+            filters.add(StudentProfile.Classification.Graduate);
         }
-        else if (level == "B") {
-            return StudentProfile.Classification.Undergraduate;
+        else if (level == "U") {
+            filters.add(StudentProfile.Classification.Undergraduate);
+            filters.add(StudentProfile.Classification.Undergraduate);
         }
-
+        else {
+            filters.add(StudentProfile.Classification.Graduate);
+            filters.add(StudentProfile.Classification.Undergraduate);
+        }
+        return filters;
     }
-
 }
