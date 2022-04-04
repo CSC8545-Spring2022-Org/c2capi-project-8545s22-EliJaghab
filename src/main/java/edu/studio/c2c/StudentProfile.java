@@ -7,7 +7,7 @@ public class StudentProfile {
         Graduate, Undergraduate
     }
 
-    private String[] skills;
+    private String skills;
     private Classification classification;
 
     public StudentProfile() {
@@ -21,11 +21,11 @@ public class StudentProfile {
         this.classification = classification;
     }
 
-    public String[] getSkills() {
+    public String getSkills() {
         return skills;
     }
 
-    public void setSkills(String[] skills) {
+    public void setSkills(String skills) {
         this.skills = skills;
     }
 

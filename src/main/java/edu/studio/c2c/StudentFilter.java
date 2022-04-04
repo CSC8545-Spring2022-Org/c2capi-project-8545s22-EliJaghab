@@ -19,7 +19,7 @@ public class StudentFilter {
         while (YES_SEARCH_AGAIN.equals(searchAgain)) {
             String level = getLevel();
             String[] skills = getSkills();
-            printCriteria(level, skills);
+            System.out.println(getCriteriaOutput(level, skills));
             searchAgain = getSearchAgain();
         }
     }
@@ -68,11 +68,11 @@ public class StudentFilter {
 
     public String[] trimSkills(String rawSkills) {
         String[] rawSkillsSplit = rawSkills.split(",");
-        System.out.println(rawSkillsSplit.length);
         String[] skills = new String[rawSkillsSplit.length];
         for (int i = 0; i < rawSkillsSplit.length; i++) {
             skills[i] = rawSkillsSplit[i].trim();
         }
+        System.out.println(skills.length);
         return skills;
     }
 
@@ -97,11 +97,12 @@ public class StudentFilter {
         }
     }
 
-    public void printCriteria(String level, String[] skills) {
+    public String getCriteriaOutput(String level, String[] skills) {
         String skillsOutput = skills.toString();
         skillsOutput = formatString(skills);
-        System.out.println("Selected search criteria: StudentFilter [levelCriterion=" + level + ", skillsCriteria="
-                + skillsOutput + "]");
+        String criteriaOutput = "Selected search criteria: StudentFilter [levelCriterion=" + level + ", skillsCriteria="
+                + skillsOutput + "]";
+        return criteriaOutput;
     }
 
     public String formatString(String[] rawSkills) {
