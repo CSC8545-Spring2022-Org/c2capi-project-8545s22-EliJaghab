@@ -41,9 +41,9 @@ public class User {
     }
 
     public String toString() {
-        return "Name: " + this.getName() + " " + "Email: " + this.getEmail() + " " + "User Type: " + this.getUserType()
-                + " " + "Classification: " + this.studentProfile.getClassification() + " " + "Skills: "
-                + this.studentProfile.getSkills();
+        return "User: [name=" + this.getName() + ", email=" + this.getEmail() + ", userType=" + this.getUserType()
+                + ", studentProfile=StudentProfile [classification=" + this.getStudentProfile().getClassification()
+                + ", skills=" + this.getStudentProfile().getSkills() + "]]";
     }
 
     public String getName() {

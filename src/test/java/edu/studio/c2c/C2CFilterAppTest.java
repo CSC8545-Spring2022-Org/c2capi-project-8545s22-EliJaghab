@@ -7,9 +7,10 @@ import org.junit.jupiter.api.Test;
 
 public class C2CFilterAppTest {
 
+    private C2CFilterApp app = new C2CFilterApp();
+
     @Test
     public void testValidateBearerToken() {
-        C2CFilterApp app = new C2CFilterApp();
 
         String[] nullBearerToken = { "" };
         Boolean nullResponse = app.validateBearerToken(nullBearerToken);

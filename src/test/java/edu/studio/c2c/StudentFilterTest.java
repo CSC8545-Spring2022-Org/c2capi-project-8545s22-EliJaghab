@@ -5,6 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 public class StudentFilterTest {
@@ -81,8 +86,6 @@ public class StudentFilterTest {
 
     @Test
     public void testIsSearchAgainValid() {
-        StudentFilter filter = new StudentFilter();
-
         String yes = "y";
         assertTrue(filter.isSearchAgainValid(yes));
 
@@ -131,6 +134,95 @@ public class StudentFilterTest {
         assertEquals(filter.formatLevel("G"), "Graduate");
         assertEquals(filter.formatLevel("U"), "Undergraduate");
         assertEquals(filter.formatLevel("B"), "Both");
+    }
+
+    @Test
+    public void testGetMatch() throws Exception {
+        UserParser parser = new UserParser();
+        String studentsSamplePath = "src/test/resources/sample-students-response.json";
+        String studentsSample = readFileAsString(studentsSamplePath);
+        List<User> formattedStudents = parser.parseUsers(studentsSample);
+        String[] searchSkills = { "python", "java" };
+        String actualResponse = filter.getMatch(formattedStudents, "G", searchSkills);
+        String expectedResponse = "Matched 3 of total 10" + "\n" + formattedStudents.get(0).toString() + "\n"
+                + formattedStudents.get(1).toString() + "\n" + formattedStudents.get(5).toString() + "\n";
+        assertEquals(actualResponse, expectedResponse);
+    }
+
+    public static String readFileAsString(String file) throws Exception {
+        return new String(Files.readAllBytes(Paths.get(file)));
+    }
+
+    @Test
+    public void testGetMatchedStudentsOutput() throws Exception {
+        UserParser parser = new UserParser();
+        String studentsSamplePath = "src/test/resources/sample-students-response.json";
+        String studentsSample = readFileAsString(studentsSamplePath);
+        List<User> formattedStudents = parser.parseUsers(studentsSample);
+        User firstStudent = formattedStudents.get(0);
+        formattedStudents.clear();
+        formattedStudents.add(firstStudent);
+        assertEquals(firstStudent.toString() + "\n", filter.getMatchedStudentsOutput(formattedStudents));
+    }
+
+    @Test
+    public void testGetMatchCountOutput() throws Exception {
+        UserParser parser = new UserParser();
+        String studentsSamplePath = "src/test/resources/sample-students-response.json";
+        String studentsSample = readFileAsString(studentsSamplePath);
+        List<User> formattedStudents = parser.parseUsers(studentsSample);
+        assertEquals("Matched 5 of total 10", filter.getMatchCountOutput(5, formattedStudents));
+    }
+
+    @Test
+    public void testDoesSkillsMatch() throws Exception {
+        UserParser parser = new UserParser();
+        String studentsSamplePath = "src/test/resources/sample-students-response.json";
+        String studentsSample = readFileAsString(studentsSamplePath);
+        List<User> formattedStudents = parser.parseUsers(studentsSample);
+        User firstUser = formattedStudents.get(0);
+
+        assertFalse(filter.doesSkillsMatch("C++", firstUser));
+        assertTrue(filter.doesSkillsMatch("tdd", firstUser));
+        assertTrue(filter.doesSkillsMatch("TDD", firstUser));
+
+        User lastUser = formattedStudents.get(9);
+        assertFalse(filter.doesSkillsMatch("python", lastUser));
+    }
+
+    @Test
+    public void testDoesLevelMatch() throws Exception {
+        UserParser parser = new UserParser();
+        String studentsSamplePath = "src/test/resources/sample-students-response.json";
+        String studentsSample = readFileAsString(studentsSamplePath);
+        List<User> formattedStudents = parser.parseUsers(studentsSample);
+        User firstUser = formattedStudents.get(0);
+        List<StudentProfile.Classification> filtersGraduate = new ArrayList<StudentProfile.Classification>();
+        filtersGraduate.add(StudentProfile.Classification.Graduate);
+        filtersGraduate.add(StudentProfile.Classification.Graduate);
+        List<StudentProfile.Classification> filtersUndergraduate = new ArrayList<StudentProfile.Classification>();
+        filtersUndergraduate.add(StudentProfile.Classification.Undergraduate);
+        filtersUndergraduate.add(StudentProfile.Classification.Undergraduate);
+
+        assertTrue(filter.doesLevelMatch(filtersGraduate, firstUser));
+        assertFalse(filter.doesLevelMatch(filtersUndergraduate, firstUser));
+    }
+
+    @Test
+    public void testGetLevelFilters() {
+        List<StudentProfile.Classification> filtersGraduate = new ArrayList<StudentProfile.Classification>();
+        filtersGraduate.add(StudentProfile.Classification.Graduate);
+        filtersGraduate.add(StudentProfile.Classification.Graduate);
+        List<StudentProfile.Classification> filtersUndergraduate = new ArrayList<StudentProfile.Classification>();
+        filtersUndergraduate.add(StudentProfile.Classification.Undergraduate);
+        filtersUndergraduate.add(StudentProfile.Classification.Undergraduate);
+        List<StudentProfile.Classification> filtersBoth = new ArrayList<StudentProfile.Classification>();
+        filtersBoth.add(StudentProfile.Classification.Graduate);
+        filtersBoth.add(StudentProfile.Classification.Undergraduate);
+
+        assertEquals(filter.getLevelFilters("G"), filtersGraduate);
+        assertEquals(filter.getLevelFilters("U"), filtersUndergraduate);
+        assertEquals(filter.getLevelFilters("B"), filtersBoth);
     }
 
 }

@@ -152,23 +152,43 @@ public class StudentFilter {
                     }
                 }
             }
-
         }
+        matchesBuilder.append(getMatchCountOutput(matchedCount, formattedStudents));
+        matchesBuilder.append("\n");
+        matchesBuilder.append(getMatchedStudentsOutput(matchedStudents));
+        String matchOutput = matchesBuilder.toString();
+        return matchOutput;
+    }
 
-    }return"hello";
+    public String getMatchedStudentsOutput(List<User> matchedStudents) {
+        StringBuilder studentMatchesBuilder = new StringBuilder();
+        for (User user : matchedStudents) {
+            studentMatchesBuilder.append(user.toString());
+            studentMatchesBuilder.append("\n");
+        }
+        String studentMatchesOutput = studentMatchesBuilder.toString();
+        return studentMatchesOutput;
 
+    }
+
+    public String getMatchCountOutput(Integer matchedCount, List<User> formattedStudents) {
+        StringBuilder matchCountOutputBuilder = new StringBuilder();
+        Integer totalStudents = formattedStudents.size();
+        matchCountOutputBuilder.append("Matched " + matchedCount + " of total " + totalStudents);
+        String matchCountOutput = matchCountOutputBuilder.toString();
+        return matchCountOutput;
     }
 
     public boolean doesSkillsMatch(String rawSearchSkill, User user) {
         String skills = user.getStudentProfile().getSkills();
         String searchSkill = rawSearchSkill.toLowerCase();
-        if (skills.contains(searchSkill)) {
-            return true;
+        boolean match = false;
+        if (skills != null) {
+            if (skills.toLowerCase().contains(searchSkill.toLowerCase())) {
+                match = true;
+            }
         }
-        else {
-            return false;
-        }
-
+        return match;
     }
 
     public boolean doesLevelMatch(List<Classification> filters, User user) {
@@ -182,9 +202,6 @@ public class StudentFilter {
             return false;
         }
     }
-
-    public String getSkills (User user) {
-        return user.getStudentProfile().getSkills()
 
     public List<Classification> getLevelFilters(String level) {
         List<StudentProfile.Classification> filters = new ArrayList<StudentProfile.Classification>();

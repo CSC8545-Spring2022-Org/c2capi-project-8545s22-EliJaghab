@@ -68,12 +68,10 @@ public class UserTest {
 
         StudentProfile user1StudentProfile = new StudentProfile();
         user1StudentProfile.setClassification(Classification.Graduate);
-        String[] user1StudentSkills = { "java", "python", "TDD" };
-        System.out.println(user1StudentSkills);
+        String user1StudentSkills = "java, python, TDD";
         user1StudentProfile.setSkills(user1StudentSkills);
         user1Student.setStudentProfile(user1StudentProfile);
-        String expectedString = "Name: User1 Email: user@users.edu User Type: Student Classification: Graduate Skills: \"java\", \"python\", \"TDD\"";
-        System.out.println(user1Student.toString());
+        String expectedString = "Name: User1 Email: user@users.edu User Type: Student Classification: Graduate Skills: java, python, TDD";
 
     }
 
