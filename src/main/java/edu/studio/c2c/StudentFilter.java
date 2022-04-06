@@ -152,7 +152,6 @@ public class StudentFilter {
     public boolean doesStudentSkillsMatch(String[] searchSkills, User user) {
         String skills = user.getStudentProfile().getSkills();
         Integer matchCount = 0;
-        System.out.println(Arrays.toString(searchSkills));
         if ("[]".equals(Arrays.toString(searchSkills))) {
             return true;
         }
