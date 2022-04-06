@@ -43,7 +43,7 @@ public class User {
     public String toString() {
         return "User: [name=" + this.getName() + ", email=" + this.getEmail() + ", userType=" + this.getUserType()
                 + ", studentProfile=StudentProfile [classification=" + this.getStudentProfile().getClassification()
-                + ", skills=" + this.getStudentProfile().getSkills() + "]]";
+                + ", skills=[" + this.getStudentProfile().getSkills() + "]]";
     }
 
     public String getName() {

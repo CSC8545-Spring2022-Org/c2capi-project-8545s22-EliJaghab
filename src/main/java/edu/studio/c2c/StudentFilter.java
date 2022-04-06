@@ -1,6 +1,7 @@
 package edu.studio.c2c;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -53,29 +54,18 @@ public class StudentFilter {
     public String[] getSkills() {
         String rawSkills = "";
         Scanner scanner = null;
-        while (!areSkillsValid(rawSkills)) {
-            scanner = new Scanner(System.in);
-            System.out.println(SKILLS_PROMPT);
-            rawSkills = scanner.nextLine();
-        }
-        String[] skills = trimSkills(rawSkills);
+        scanner = new Scanner(System.in);
+        System.out.println(SKILLS_PROMPT);
+        rawSkills = scanner.nextLine();
+        String[] skills = trimAndLowerSkills(rawSkills);
         return skills;
     }
 
-    public boolean areSkillsValid(String skills) {
-        if (!"".equals(skills) && !" ".equals(skills)) {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public String[] trimSkills(String rawSkills) {
+    public String[] trimAndLowerSkills(String rawSkills) {
         String[] rawSkillsSplit = rawSkills.split(",");
         String[] skills = new String[rawSkillsSplit.length];
         for (int i = 0; i < rawSkillsSplit.length; i++) {
-            skills[i] = rawSkillsSplit[i].trim();
+            skills[i] = rawSkillsSplit[i].trim().toLowerCase();
         }
         return skills;
     }
@@ -86,7 +76,7 @@ public class StudentFilter {
         while (!isSearchAgainValid(searchAgain)) {
             scanner = new Scanner(System.in);
             System.out.println(SEARCH_AGAIN_PROMPT);
-            searchAgain = scanner.nextLine();
+            searchAgain = scanner.nextLine().toUpperCase();
         }
         return searchAgain;
     }
@@ -124,10 +114,10 @@ public class StudentFilter {
 
     public String formatLevel(String rawLevel) {
         String level = "";
-        if (rawLevel == "G") {
+        if ("G".equals(rawLevel)) {
             level = "Graduate";
         }
-        else if (rawLevel == "U") {
+        else if ("U".equals(rawLevel)) {
             level = "Undergraduate";
         }
         else {
@@ -142,12 +132,11 @@ public class StudentFilter {
         Integer matchedCount = 0;
         List<User> matchedStudents = new ArrayList<User>();
         for (User user : formattedStudents) {
-            if (doesLevelMatch(filters, user)) {
-                for (String searchSkill : searchSkills) {
-                    if (doesSkillsMatch(searchSkill, user)) {
+            if (isStudent(user)) {
+                if (doesLevelMatch(filters, user)) {
+                    if (doesStudentSkillsMatch(searchSkills, user)) {
                         matchedCount++;
                         matchedStudents.add(user);
-                        break;
 
                     }
                 }
@@ -158,6 +147,32 @@ public class StudentFilter {
         matchesBuilder.append(getMatchedStudentsOutput(matchedStudents));
         String matchOutput = matchesBuilder.toString();
         return matchOutput;
+    }
+
+    public boolean doesStudentSkillsMatch(String[] searchSkills, User user) {
+        String skills = user.getStudentProfile().getSkills();
+        Integer matchCount = 0;
+        System.out.println(Arrays.toString(searchSkills));
+        if ("[]".equals(Arrays.toString(searchSkills))) {
+            return true;
+        }
+        if (skills != null) {
+            String[] skillsSplit = skills.toLowerCase().split(",");
+            for (String searchSkill : searchSkills) {
+                for (String skill : skillsSplit) {
+                    if (searchSkill.equalsIgnoreCase(skill.trim())) {
+                        matchCount++;
+                        break;
+                    }
+                }
+            }
+        }
+        boolean match = matchCount == searchSkills.length;
+        return match;
+    }
+
+    public boolean isStudent(User user) {
+        return user.getUserType() == User.UserType.Student;
     }
 
     public String getMatchedStudentsOutput(List<User> matchedStudents) {
@@ -177,18 +192,6 @@ public class StudentFilter {
         matchCountOutputBuilder.append("Matched " + matchedCount + " of total " + totalStudents);
         String matchCountOutput = matchCountOutputBuilder.toString();
         return matchCountOutput;
-    }
-
-    public boolean doesSkillsMatch(String rawSearchSkill, User user) {
-        String skills = user.getStudentProfile().getSkills();
-        String searchSkill = rawSearchSkill.toLowerCase();
-        boolean match = false;
-        if (skills != null) {
-            if (skills.toLowerCase().contains(searchSkill.toLowerCase())) {
-                match = true;
-            }
-        }
-        return match;
     }
 
     public boolean doesLevelMatch(List<Classification> filters, User user) {

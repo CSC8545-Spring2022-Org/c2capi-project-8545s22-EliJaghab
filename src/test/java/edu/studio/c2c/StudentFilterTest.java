@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import edu.studio.c2c.User.UserType;
+
 public class StudentFilterTest {
     private StudentFilter filter = new StudentFilter();
 
@@ -68,19 +70,19 @@ public class StudentFilterTest {
     public void testTrimSkills() {
         String oneSkill = "python";
         String[] oneSkillExpected = { "python" };
-        assertArrayEquals(filter.trimSkills(oneSkill), oneSkillExpected);
+        assertArrayEquals(filter.trimAndLowerSkills(oneSkill), oneSkillExpected);
 
         String oneSkillSpaced = "  python  ";
         String[] oneSkillSpacedExpected = { "python" };
-        assertArrayEquals(filter.trimSkills(oneSkillSpaced), oneSkillSpacedExpected);
+        assertArrayEquals(filter.trimAndLowerSkills(oneSkillSpaced), oneSkillSpacedExpected);
 
         String threeSkills = "python, java, tdd";
         String[] threeSkillsExpected = { "python", "java", "tdd" };
-        assertArrayEquals(filter.trimSkills(threeSkills), threeSkillsExpected);
+        assertArrayEquals(filter.trimAndLowerSkills(threeSkills), threeSkillsExpected);
 
         String threeSkillsSpaced = "python  , java  , tdd  ";
         String[] threeSkillsSpacedExpected = { "python", "java", "tdd" };
-        assertArrayEquals(filter.trimSkills(threeSkillsSpaced), threeSkillsSpacedExpected);
+        assertArrayEquals(filter.trimAndLowerSkills(threeSkillsSpaced), threeSkillsSpacedExpected);
 
     }
 
@@ -144,8 +146,7 @@ public class StudentFilterTest {
         List<User> formattedStudents = parser.parseUsers(studentsSample);
         String[] searchSkills = { "python", "java" };
         String actualResponse = filter.getMatch(formattedStudents, "G", searchSkills);
-        String expectedResponse = "Matched 3 of total 10" + "\n" + formattedStudents.get(0).toString() + "\n"
-                + formattedStudents.get(1).toString() + "\n" + formattedStudents.get(5).toString() + "\n";
+        String expectedResponse = "Matched 1 of total 10" + "\n" + formattedStudents.get(1).toString() + "\n";
         assertEquals(actualResponse, expectedResponse);
     }
 
@@ -175,19 +176,24 @@ public class StudentFilterTest {
     }
 
     @Test
-    public void testDoesSkillsMatch() throws Exception {
+    public void testDoesStudentSkillsMatch() throws Exception {
         UserParser parser = new UserParser();
         String studentsSamplePath = "src/test/resources/sample-students-response.json";
         String studentsSample = readFileAsString(studentsSamplePath);
         List<User> formattedStudents = parser.parseUsers(studentsSample);
         User firstUser = formattedStudents.get(0);
-
-        assertFalse(filter.doesSkillsMatch("C++", firstUser));
-        assertTrue(filter.doesSkillsMatch("tdd", firstUser));
-        assertTrue(filter.doesSkillsMatch("TDD", firstUser));
+        String[] correctMatch = { "TDD", "Microservices", "Spring" };
+        String[] correctLowerMatch = { "tdd", "microservices", "spring" };
+        String[] incorrectPartialMatch = { "TDD", "Mircoservices", "Spring", "Python" };
+        // System.out.println(firstUser.toString());
+        assertTrue(filter.doesStudentSkillsMatch(correctMatch, firstUser));
+        // assertTrue(filter.doesStudentMatch(correctLowerMatch, firstUser));
+        // assertFalse(filter.doesStudentMatch(incorrectPartialMatch,
+        // firstUser));
 
         User lastUser = formattedStudents.get(9);
-        assertFalse(filter.doesSkillsMatch("python", lastUser));
+        // assertFalse(filter.doesStudentMatch(incorrectPartialMatch,
+        // lastUser));
     }
 
     @Test
@@ -223,6 +229,20 @@ public class StudentFilterTest {
         assertEquals(filter.getLevelFilters("G"), filtersGraduate);
         assertEquals(filter.getLevelFilters("U"), filtersUndergraduate);
         assertEquals(filter.getLevelFilters("B"), filtersBoth);
+    }
+
+    @Test
+    public void testIsStudent() throws Exception {
+        UserParser parser = new UserParser();
+        String studentsSamplePath = "src/test/resources/sample-students-response.json";
+        String studentsSample = readFileAsString(studentsSamplePath);
+        List<User> formattedStudents = parser.parseUsers(studentsSample);
+        User firstUser = formattedStudents.get(0);
+        assertTrue(filter.isStudent(firstUser));
+
+        firstUser.setUserType(UserType.Faculty);
+        assertFalse(filter.isStudent(firstUser));
+
     }
 
 }
