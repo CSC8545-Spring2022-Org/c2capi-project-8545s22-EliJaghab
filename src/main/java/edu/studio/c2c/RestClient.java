@@ -6,7 +6,7 @@ import kong.unirest.Unirest;
 public class RestClient {
     public static final String API_URI = "https://apiclasstocorporate.azurewebsites.net/api/users?userType=Student";
 
-    public static String getUsers(String token) {
+    public String getUsers(String token) {
         HttpResponse<String> getHTTPResponse = Unirest.get(API_URI).header("Authorization", "Bearer " + token)
                 .asString();
         if (isResponseSuccessful(getHTTPResponse)) {
@@ -17,7 +17,7 @@ public class RestClient {
         }
     }
 
-    public static boolean isResponseSuccessful(HttpResponse<String> response) {
+    public boolean isResponseSuccessful(HttpResponse<String> response) {
         if (response.getStatus() == 200) {
             return true;
         }

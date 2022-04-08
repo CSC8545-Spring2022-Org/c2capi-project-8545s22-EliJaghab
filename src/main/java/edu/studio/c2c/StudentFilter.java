@@ -137,7 +137,6 @@ public class StudentFilter {
                     if (doesStudentSkillsMatch(searchSkills, user)) {
                         matchedCount++;
                         matchedStudents.add(user);
-
                     }
                 }
             }

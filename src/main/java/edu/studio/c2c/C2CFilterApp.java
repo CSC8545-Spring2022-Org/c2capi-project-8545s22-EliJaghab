@@ -8,8 +8,13 @@ public class C2CFilterApp {
     protected static final String MORE_THAN_ONE_BEARER_TOKEN = "Error: Bearer Token Formatted Incorrectly";
 
     public static void main(String[] args) {
-        if (validateBearerToken(args)) {
-            String rawStudents = getRawStudents(args[0]);
+        C2CFilterApp app = new C2CFilterApp();
+        app.startSession(args);
+    }
+
+    public void startSession(String[] token) {
+        if (validateBearerToken(token)) {
+            String rawStudents = getRawStudents(token[0]);
             UserParser parser = new UserParser();
             List<User> formattedStudents = parser.parseUsers(rawStudents);
             StudentFilter studentFilter = new StudentFilter();
@@ -17,7 +22,7 @@ public class C2CFilterApp {
         }
     }
 
-    public static boolean validateBearerToken(String[] args) {
+    public boolean validateBearerToken(String[] args) {
         boolean validToken = false;
         if (args.length == 0 || args[0].isEmpty()) {
             System.out.println(NULL_BEARER_TOKEN);
@@ -37,8 +42,8 @@ public class C2CFilterApp {
         return validToken;
     }
 
-    public static String getRawStudents(String token) {
+    public String getRawStudents(String token) {
         RestClient client = new RestClient();
-        return RestClient.getUsers(token);
+        return client.getUsers(token);
     }
 }

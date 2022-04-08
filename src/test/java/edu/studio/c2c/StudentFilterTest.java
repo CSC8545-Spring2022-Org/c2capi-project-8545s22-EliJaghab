@@ -48,25 +48,6 @@ public class StudentFilterTest {
     }
 
     @Test
-    public void areSkillsValid() {
-        String oneSkill = "python";
-        assertTrue(filter.areSkillsValid(oneSkill));
-
-        String twoSkills = "python, java";
-        assertTrue(filter.areSkillsValid(twoSkills));
-
-        String threeSkills = "python, java, tdd";
-        assertTrue(filter.areSkillsValid(threeSkills));
-
-        String wrongNull = "";
-        assertFalse(filter.areSkillsValid(wrongNull));
-
-        String wrongSpace = " ";
-        assertFalse(filter.areSkillsValid(wrongSpace));
-
-    }
-
-    @Test
     public void testTrimSkills() {
         String oneSkill = "python";
         String[] oneSkillExpected = { "python" };
