@@ -16,9 +16,6 @@ public class C2CFilterAppIT {
     public void endToEndIntegrationTest() {
         String[] args = new String[1];
         args[0] = obtainBearerTokenUsingSystemProps();
-        // args[0] =
-        // "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImVQU29ZZ0ZZS2hzWmF2RFBnMmF5dCJ9.eyJodHRwczovL3d3dy5oZWxsby5jb20vcm9sZXMiOltdLCJpc3MiOiJodHRwczovL2Rldi13anBpbG1pYy51cy5hdXRoMC5jb20vIiwic3ViIjoiZ29vZ2xlLW9hdXRoMnwxMDQxMTg2Mzc5NTAwNjYwMzgxNDEiLCJhdWQiOiJodHRwczovL3d3dy5oZWxsby5jb20vIiwiaWF0IjoxNjQ5MzgyNTQ4LCJleHAiOjE2NDk0Njg5NDgsImF6cCI6IlJ4bER1TTNVQ294eVRSNXpuc1hQcGE0QTU5ZDB4UFluIiwic2NvcGUiOiIiLCJwZXJtaXNzaW9ucyI6W119.l8k5exX01V8h2lgQujKiHAuMfLn8Qqm6sXUpAz5MrQSpTIzyXnwKr2d1sKudzA85_LMyJnFrKkFTpT561cPFoxPv1TH2lXRVAKQVXO_nIUZEOhORiS__ti30vQHKDb3MOErGiS4jF3VUDxMV4fARDbQRHJSUg6Kcbk8n7p2xsBd5qR8qnnUGyQe8vy7YQdFRxBKDjsROxf1LcZSo_8aosX-AcynefMDlMorhoybFd7e61e5MMZq_aBzJU1OgJ3SeeR-tC2S8M_4DBC9tnFnWKWZ8rOjYPZ0EUSQ6-bZrdDTAvHsBwOmt8LJqUuRx-1OhTBCGtTA0j6pX4qmIOhzZEg";
-
         C2CFilterApp filter = new C2CFilterApp();
         if (filter.validateBearerToken(args)) {
             String rawStudents = filter.getRawStudents(args[0]);
@@ -46,7 +43,7 @@ public class C2CFilterAppIT {
     }
 
     protected String obtainBearerTokenUsingSystemProps() {
-        String token = System.getProperty("bearer.token");
+        String token = System.getProperty("c2capi.token");
         return token;
     }
 }

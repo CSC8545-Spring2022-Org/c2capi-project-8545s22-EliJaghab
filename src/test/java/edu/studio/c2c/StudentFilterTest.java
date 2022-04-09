@@ -166,15 +166,13 @@ public class StudentFilterTest {
         String[] correctMatch = { "TDD", "Microservices", "Spring" };
         String[] correctLowerMatch = { "tdd", "microservices", "spring" };
         String[] incorrectPartialMatch = { "TDD", "Mircoservices", "Spring", "Python" };
-        // System.out.println(firstUser.toString());
         assertTrue(filter.doesStudentSkillsMatch(correctMatch, firstUser));
-        // assertTrue(filter.doesStudentMatch(correctLowerMatch, firstUser));
-        // assertFalse(filter.doesStudentMatch(incorrectPartialMatch,
-        // firstUser));
+        assertTrue(filter.doesStudentSkillsMatch(correctLowerMatch, firstUser));
+        assertFalse(filter.doesStudentSkillsMatch(incorrectPartialMatch, firstUser));
 
-        User lastUser = formattedStudents.get(9);
-        // assertFalse(filter.doesStudentMatch(incorrectPartialMatch,
-        // lastUser));
+        User noSkills = formattedStudents.get(9);
+        String[] blankSearch = { "" };
+        assertTrue(filter.doesStudentSkillsMatch(blankSearch, firstUser));
     }
 
     @Test

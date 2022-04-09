@@ -30,4 +30,13 @@ public class C2CFilterAppTest {
 
     }
 
+    @Test
+    public void testIsValidResponse() {
+        String invalidResponse = "Invalid Response: Error 404";
+        assertFalse(app.isValidResponse(invalidResponse));
+
+        String validResponse = "[{\"photoPath\":\"h...";
+        assertTrue(app.isValidResponse(validResponse));
+    }
+
 }

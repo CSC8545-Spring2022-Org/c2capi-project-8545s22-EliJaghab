@@ -15,10 +15,12 @@ public class C2CFilterApp {
     public void startSession(String[] token) {
         if (validateBearerToken(token)) {
             String rawStudents = getRawStudents(token[0]);
-            UserParser parser = new UserParser();
-            List<User> formattedStudents = parser.parseUsers(rawStudents);
-            StudentFilter studentFilter = new StudentFilter();
-            studentFilter.startConsole(formattedStudents);
+            if (isValidResponse(rawStudents)) {
+                UserParser parser = new UserParser();
+                List<User> formattedStudents = parser.parseUsers(rawStudents);
+                StudentFilter studentFilter = new StudentFilter();
+                studentFilter.startConsole(formattedStudents);
+            }
         }
     }
 
@@ -40,6 +42,15 @@ public class C2CFilterApp {
             validToken = true;
         }
         return validToken;
+    }
+
+    public boolean isValidResponse(String response) {
+        if (response.startsWith("Invalid Response: Error ")) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     public String getRawStudents(String token) {
