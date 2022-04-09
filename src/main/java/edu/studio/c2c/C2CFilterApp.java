@@ -21,6 +21,9 @@ public class C2CFilterApp {
                 StudentFilter studentFilter = new StudentFilter();
                 studentFilter.startConsole(formattedStudents);
             }
+            else {
+                System.out.println(rawStudents);
+            }
         }
     }
 
